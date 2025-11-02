@@ -36,12 +36,17 @@ func main() {
 
 func readsum() float64 {
 	var sum float64
+
 	fmt.Println("Введите сумму:")
-	_, er := fmt.Scan(&sum)
-	if er != nil {
-		fmt.Println("Ошибка ввода")
+	for {
+		_, er := fmt.Scan(&sum)
+		if er != nil {
+			fmt.Println("Ошибка ввода, повторите ввод")
+		} else {
+			return sum
+		}
 	}
-	return sum
+	// return sum
 }
 
 func exchange(sum float64, inPutCurrency, outPutCurrency int) float64 {
@@ -79,10 +84,11 @@ func readcurrency() int {
 		_, err := fmt.Scan(&readcurrency)
 
 		if err != nil {
+			fmt.Println("Ошибка ввода, повторите ввод")
 			continue
 		}
 
-		if readcurrency != 1 || readcurrency != 2 || readcurrency != 3 {
+		if readcurrency == 1 || readcurrency == 2 || readcurrency == 3 {
 			return readcurrency
 		}
 
