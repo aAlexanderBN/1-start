@@ -60,32 +60,11 @@ func readsum() float64 {
 			return sum
 		}
 	}
-	// return sum
+
 }
 
 func exchange(sum float64, inPutCurrency, outPutCurrency int) float64 {
 
-	//var toUSD, toOutPutCurrency float64
-
-	// switch inPutCurrency {
-	// case 1:
-	// 	toUSD = 1
-	// case 2:
-	// 	toUSD = 1 / fromUSDtoRUB
-	// case 3:
-	// 	toUSD = 1 / fromUSDtoEUR
-	// }
-
-	// switch outPutCurrency {
-	// case 1:
-	// 	toOutPutCurrency = 1
-	// case 2:
-	// 	toOutPutCurrency = fromUSDtoRUB
-	// case 3:
-	// 	toOutPutCurrency = fromUSDtoEUR
-	// }
-
-	// return sum * toUSD * toOutPutCurrency
 	return sum * convToUSD[inPutCurrency] * convFromUSD[outPutCurrency]
 }
 
