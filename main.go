@@ -8,16 +8,25 @@ const fromUSDtoEUR float64 = 0.82
 const fromUSDtoRUB float64 = 82.0
 const fromEURtoRUB float64 = fromUSDtoRUB / fromUSDtoEUR
 
-var convToUSD = map[int]float64{
+type tAllConv map[string]tConv
+
+type tConv map[int]float64
+
+var convToUSD = tConv{
 	1: 1.0,
 	2: 1.0 / fromUSDtoRUB,
 	3: 1.0 / fromUSDtoEUR,
 }
 
-var convFromUSD = map[int]float64{
+var convFromUSD = tConv{
 	1: 1.0,
-	2: fromUSDtoEUR,
-	3: fromUSDtoRUB,
+	2: fromUSDtoRUB,
+	3: fromUSDtoEUR,
+}
+
+var allConv = tAllConv{
+	"from": convFromUSD,
+	"to":   convToUSD,
 }
 
 func main() {
@@ -64,8 +73,10 @@ func readsum() float64 {
 }
 
 func exchange(sum float64, inPutCurrency, outPutCurrency int) float64 {
-
-	return sum * convToUSD[inPutCurrency] * convFromUSD[outPutCurrency]
+	//rate := allConv["from"][outPutCurrency]
+	// Сумма * курс перевода в доллар из входящей валюты * курс перевода из доллара в получаему валюту
+	return sum * allConv["to"][inPutCurrency] * allConv["from"][outPutCurrency]
+	//return sum * convToUSD[inPutCurrency] * convFromUSD[outPutCurrency]
 }
 
 func readcurrency() int {
