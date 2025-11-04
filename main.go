@@ -12,29 +12,28 @@ type tAllConv map[string]tConv
 
 type tConv map[int]float64
 
-var convToUSD = tConv{
-	1: 1.0,
-	2: 1.0 / fromUSDtoRUB,
-	3: 1.0 / fromUSDtoEUR,
-}
-
-var convFromUSD = tConv{
-	1: 1.0,
-	2: fromUSDtoRUB,
-	3: fromUSDtoEUR,
-}
-
-var allConv = tAllConv{
-	"from": convFromUSD,
-	"to":   convToUSD,
-}
-
 func main() {
 
 	var inputcurrency, outputcurrency int
 	var sum float64
 	var toExit string
 
+	var convToUSD = tConv{
+		1: 1.0,
+		2: 1.0 / fromUSDtoRUB,
+		3: 1.0 / fromUSDtoEUR,
+	}
+
+	var convFromUSD = tConv{
+		1: 1.0,
+		2: fromUSDtoRUB,
+		3: fromUSDtoEUR,
+	}
+
+	allConv := tAllConv{
+		"from": convFromUSD,
+		"to":   convToUSD,
+	}
 	for {
 		fmt.Println("Введите входящую валюту")
 		inputcurrency = readcurrency()
@@ -44,7 +43,7 @@ func main() {
 		fmt.Println("Введите исходящую валюту")
 		outputcurrency = readcurrency()
 
-		sum = exchange(sum, inputcurrency, outputcurrency)
+		sum = exchange(sum, inputcurrency, outputcurrency, allConv)
 
 		fmt.Printf("\nВ новой валюте сумма будет: %.0f", sum)
 		fmt.Printf("\nДля повтора расчета нажмите [y], для выхода любую другу клавишу")
@@ -72,11 +71,10 @@ func readsum() float64 {
 
 }
 
-func exchange(sum float64, inPutCurrency, outPutCurrency int) float64 {
-	//rate := allConv["from"][outPutCurrency]
+func exchange(sum float64, inPutCurrency, outPutCurrency int, convRates tAllConv) float64 {
+
 	// Сумма * курс перевода в доллар из входящей валюты * курс перевода из доллара в получаему валюту
-	return sum * allConv["to"][inPutCurrency] * allConv["from"][outPutCurrency]
-	//return sum * convToUSD[inPutCurrency] * convFromUSD[outPutCurrency]
+	return sum * convRates["to"][inPutCurrency] * convRates["from"][outPutCurrency]
 }
 
 func readcurrency() int {
