@@ -8,6 +8,18 @@ const fromUSDtoEUR float64 = 0.82
 const fromUSDtoRUB float64 = 82.0
 const fromEURtoRUB float64 = fromUSDtoRUB / fromUSDtoEUR
 
+var convToUSD = map[int]float64{
+	1: 1.0,
+	2: 1.0 / fromUSDtoRUB,
+	3: 1.0 / fromUSDtoEUR,
+}
+
+var convFromUSD = map[int]float64{
+	1: 1.0,
+	2: fromUSDtoEUR,
+	3: fromUSDtoRUB,
+}
+
 func main() {
 
 	var inputcurrency, outputcurrency int
@@ -32,6 +44,8 @@ func main() {
 			break
 		}
 	}
+
+	_ = fromEURtoRUB
 }
 
 func readsum() float64 {
@@ -51,27 +65,28 @@ func readsum() float64 {
 
 func exchange(sum float64, inPutCurrency, outPutCurrency int) float64 {
 
-	var toUSD, toOutPutCurrency float64
+	//var toUSD, toOutPutCurrency float64
 
-	switch inPutCurrency {
-	case 1:
-		toUSD = 1
-	case 2:
-		toUSD = 1 / fromUSDtoRUB
-	case 3:
-		toUSD = 1 / fromUSDtoEUR
-	}
+	// switch inPutCurrency {
+	// case 1:
+	// 	toUSD = 1
+	// case 2:
+	// 	toUSD = 1 / fromUSDtoRUB
+	// case 3:
+	// 	toUSD = 1 / fromUSDtoEUR
+	// }
 
-	switch outPutCurrency {
-	case 1:
-		toOutPutCurrency = 1
-	case 2:
-		toOutPutCurrency = fromUSDtoRUB
-	case 3:
-		toOutPutCurrency = fromUSDtoEUR
-	}
+	// switch outPutCurrency {
+	// case 1:
+	// 	toOutPutCurrency = 1
+	// case 2:
+	// 	toOutPutCurrency = fromUSDtoRUB
+	// case 3:
+	// 	toOutPutCurrency = fromUSDtoEUR
+	// }
 
-	return sum * toUSD * toOutPutCurrency
+	// return sum * toUSD * toOutPutCurrency
+	return sum * convToUSD[inPutCurrency] * convFromUSD[outPutCurrency]
 }
 
 func readcurrency() int {
