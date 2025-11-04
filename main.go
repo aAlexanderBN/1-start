@@ -8,6 +8,18 @@ const fromUSDtoEUR float64 = 0.82
 const fromUSDtoRUB float64 = 82.0
 const fromEURtoRUB float64 = fromUSDtoRUB / fromUSDtoEUR
 
+var convToUSD = map[int]float64{
+	1: 1.0,
+	2: 1.0 / fromUSDtoRUB,
+	3: 1.0 / fromUSDtoEUR,
+}
+
+var convFromUSD = map[int]float64{
+	1: 1.0,
+	2: fromUSDtoEUR,
+	3: fromUSDtoRUB,
+}
+
 func main() {
 
 	var inputcurrency, outputcurrency int
@@ -32,41 +44,28 @@ func main() {
 			break
 		}
 	}
+
+	_ = fromEURtoRUB
 }
 
 func readsum() float64 {
 	var sum float64
+
 	fmt.Println("Введите сумму:")
-	_, er := fmt.Scan(&sum)
-	if er != nil {
-		fmt.Println("Ошибка ввода")
+	for {
+		_, er := fmt.Scan(&sum)
+		if er != nil {
+			fmt.Println("Ошибка ввода, повторите ввод")
+		} else {
+			return sum
+		}
 	}
-	return sum
+
 }
 
 func exchange(sum float64, inPutCurrency, outPutCurrency int) float64 {
 
-	var toUSD, toOutPutCurrency float64
-
-	switch inPutCurrency {
-	case 1:
-		toUSD = 1
-	case 2:
-		toUSD = 1 / fromUSDtoRUB
-	case 3:
-		toUSD = 1 / fromUSDtoEUR
-	}
-
-	switch outPutCurrency {
-	case 1:
-		toOutPutCurrency = 1
-	case 2:
-		toOutPutCurrency = fromUSDtoRUB
-	case 3:
-		toOutPutCurrency = fromUSDtoEUR
-	}
-
-	return sum * toUSD * toOutPutCurrency
+	return sum * convToUSD[inPutCurrency] * convFromUSD[outPutCurrency]
 }
 
 func readcurrency() int {
@@ -79,10 +78,11 @@ func readcurrency() int {
 		_, err := fmt.Scan(&readcurrency)
 
 		if err != nil {
+			fmt.Println("Ошибка ввода, повторите ввод")
 			continue
 		}
 
-		if readcurrency != 1 || readcurrency != 2 || readcurrency != 3 {
+		if readcurrency == 1 || readcurrency == 2 || readcurrency == 3 {
 			return readcurrency
 		}
 
